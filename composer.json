@@ -1,5 +1,5 @@
 {
-    "name": "THZ-Costa/laravel-sicredi",
+    "name": "thz-costa/laravel-sicredi",
     "description": "A package to create charges from SICREDI API",
     "type": "library",
     "license": "MIT",
