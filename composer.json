@@ -1,0 +1,17 @@
+{
+    "name": "THZ-Costa/laravel-sicredi",
+    "description": "A package to create charges from SICREDI API",
+    "type": "library",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "ThzCosta\\LaravelSicredi\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Thomaz Costa"
+        }
+    ],
+    "require": {}
+}
