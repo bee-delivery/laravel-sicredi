@@ -1,6 +1,7 @@
 {
     "name": "thz-costa/laravel-sicredi",
     "description": "A package to create charges from SICREDI API",
+    "keywords": ["sicredi", "laravel", "bank"],
     "type": "library",
     "license": "MIT",
     "autoload": {
@@ -13,5 +14,9 @@
             "name": "Thomaz Costa"
         }
     ],
-    "require": {}
+    "require": {
+        "php": "^7.3|^8.0",
+        "guzzlehttp/guzzle": "^7.8",
+        "illuminate/redis": "^9.52"
+    }
 }
