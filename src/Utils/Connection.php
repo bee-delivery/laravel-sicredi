@@ -7,9 +7,41 @@ use GuzzleHttp\Client;
 
 Class Connection
 {
-    public function get() 
+    public function get($url, $accessToken, $params = null) 
     {
-        
+        try {
+            $cliente = new Client();
+
+            $headerCob = [
+                'Content-Type'  => 'application/x-www-form-urlencoded',
+                'Authorization' => $accessToken,
+                'x-api-key'     => env('SICREDI_API_KEY'),
+                'cooperativa'   => '6789', //pegar essas infor do env tbm 
+                'posto'         => '03',
+            ];   
+
+            if(! $params) {
+                $response = $cliente->get(env('SICREDI_URL') . $url, [
+                    'headers'     => $headerCob,
+                    'json' => $params,
+                    ]);      
+            } else {
+                $response = $cliente->get(env('SICREDI_URL') . $url, [
+                    'headers'     => $headerCob,
+                    ]);      
+            }
+            
+            return [
+                'code' => $response->getStatusCode(),
+                'response' => json_decode($response->getBody(), true)
+            ];
+
+        } catch (RequestException $e) {
+            return [
+                'code' => $e->getCode(),
+                'response' => $e->getMessage()
+            ];
+        }
     }
 
     public function post($url, $params, $accessToken) 
@@ -19,7 +51,7 @@ Class Connection
 
             $headerCob = [
                 'Content-Type'  => 'application/json',
-                'Authorization' => 'bearer ' . $accessToken,
+                'Authorization' => $accessToken,
                 'x-api-key'     => env('SICREDI_API_KEY'),
                 'cooperativa'   => '6789', //pegar essas infor do env tbm 
                 'posto'         => '03',
@@ -43,9 +75,36 @@ Class Connection
         }
     }
 
-    public function patch()
+    public function patch($url, $params, $beneficiario,$accessToken)
     {
-        
+        try {
+            $cliente = new Client();
+
+            $headerCob = [
+                'Content-Type'  => 'application/json',
+                'Authorization' => $accessToken,
+                'codigoBeneficiario' => $beneficiario,
+                'x-api-key'     => env('SICREDI_API_KEY'),
+                'cooperativa'   => '6789', //pegar essas infor do env tbm 
+                'posto'         => '03',
+            ];   
+
+            $response = $cliente->patch(env('SICREDI_URL') . $url, [
+                'headers'     => $headerCob,
+                'json' => $params,
+                ]);  
+
+            return [
+                'code' => $response->getStatusCode(),
+                'response' => json_decode($response->getBody(), true)
+            ];
+
+        } catch (RequestException $e) {
+            return [
+                'code' => $e->getCode(),
+                'response' => $e->getMessage()
+            ];
+        }
     }
 
     public function auth($params)
