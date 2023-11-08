@@ -7,20 +7,20 @@ use GuzzleHttp\Client;
 
 Class Connection
 {
-    public function get($url, $accessToken, $params = null) 
+    public function get($url, $params = null) 
     {
         try {
             $cliente = new Client();
 
             $headerCob = [
                 'Content-Type'  => 'application/x-www-form-urlencoded',
-                'Authorization' => $accessToken,
+                'Authorization' => $this->accessToken,
                 'x-api-key'     => env('SICREDI_API_KEY'),
                 'cooperativa'   => '6789', //pegar essas infor do env tbm 
                 'posto'         => '03',
             ];   
 
-            if(! $params) {
+            if(isset($params)) {
                 $response = $cliente->get(env('SICREDI_URL') . $url, [
                     'headers'     => $headerCob,
                     'json' => $params,
@@ -44,14 +44,14 @@ Class Connection
         }
     }
 
-    public function post($url, $params, $accessToken) 
+    public function post($url, $params) 
     {
         try {
             $cliente = new Client();
 
             $headerCob = [
                 'Content-Type'  => 'application/json',
-                'Authorization' => $accessToken,
+                'Authorization' => $this->accessToken,
                 'x-api-key'     => env('SICREDI_API_KEY'),
                 'cooperativa'   => '6789', //pegar essas infor do env tbm 
                 'posto'         => '03',
