@@ -7,13 +7,13 @@ use sicredi\Cobranca;
 
 class Sicredi
 {
-    public function createCobranca($certificatefepath)
+    public function createCobranca()
     {
-        return new CreateCobranca($certificatefepath);
+        return new CreateCobranca();
     }
     
-    public function cobrancaDetails($certificatefepath)
+    public function cobrancaDetails()
     {
-        return new CobrancaDetails($certificatefepath);
+        return new CobrancaDetails();
     }
 }
