@@ -5,15 +5,15 @@ namespace sicredi;
 use sicredi\Utils\BankingConnection;
 use sicredi\Utils\Helpers;
 
-class Cobranca
+class CreateCobranca
 {
     use Helpers;
 
     protected $response; 
 
-    public function __construct($path)
+    public function __construct()
     {
-        $this->response = new BankingConnection($path);
+        $this->response = new BankingConnection();
     }
 
 
@@ -32,17 +32,4 @@ class Cobranca
         }
     }
 
-    public function getCobranca($codigoBeneficiario,  $sicredId)
-    {
-        try {
-            
-            return $response = $this->response->get("cobranca/boleto/v1/boletos?codigoBeneficiario=$codigoBeneficiario&nossoNumero=$sicredId");
-
-        } catch (\Exception $e) {
-            return [
-                'code' => $e->getCode(),
-                'response' => $e->getMessage()
-            ];
-        }
-    }
 }

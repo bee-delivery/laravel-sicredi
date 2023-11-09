@@ -14,17 +14,17 @@ class BankingConnection extends Connection
     protected $path;
     protected $accessToken;
 
-    public function __construct($path)
+    public function __construct()
     {
         if (session_status() === PHP_SESSION_NONE) {
             session_start();
         }
 
         $this->baseUrl  = config('sicredi.base_url');
-        $this->apiKey   = config('sicredi.x-api-key');
+        $this->apiKey   = config('sicredi.x_api_key');
         $this->username = config('sicredi.basic_user');
         $this->password = config('sicredi.basic_password');
-        $this->path = $path;
+        $this->path     = config('sicredi.certificate_path');
 
         $this->getAccessToken();
     }
