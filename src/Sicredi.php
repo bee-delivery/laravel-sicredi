@@ -1,29 +1,19 @@
 <?php
 
-namespace Beedelivery\Iza;
+namespace sicredi;
 
 use sicredi\Banking;
 use sicredi\Cobranca;
 
 class Sicredi
 {
-    /*
-     * Retorna uma nova instância de Banking.
-     *
-     * @return \Sicredi\Banking
-     */
-    public function banking()
+    public function createCobranca($certificatefepath)
     {
-        return new Banking();
+        return new CreateCobranca($certificatefepath);
     }
-
-    /*
-     * Retorna uma nova instância de Cobranca.
-     *
-     * @return \Sicredi\Cobranca
-     */
-    public function pix()
+    
+    public function cobrancaDetails($certificatefepath)
     {
-        return new Cobranca();
+        return new CobrancaDetails($certificatefepath);
     }
 }
