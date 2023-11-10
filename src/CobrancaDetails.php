@@ -21,7 +21,7 @@ class CobrancaDetails
     {
         try {
             
-            return $response = $this->response->get("cobranca/boleto/v1/boletos?codigoBeneficiario=$codigoBeneficiario&nossoNumero=$sicredId");
+            return $this->response->get("cobranca/boleto/v1/boletos?codigoBeneficiario=$codigoBeneficiario&nossoNumero=$sicredId");
 
         } catch (\Exception $e) {
             return [
