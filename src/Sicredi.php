@@ -1,9 +1,6 @@
 <?php
 
-namespace sicredi;
-
-use sicredi\Banking;
-use sicredi\Cobranca;
+namespace Beedelivery\Sicredi;
 
 class Sicredi
 {

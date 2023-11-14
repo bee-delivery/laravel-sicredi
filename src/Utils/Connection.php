@@ -1,6 +1,6 @@
 <?php
 
-namespace sicredi\Utils;
+namespace Beedelivery\Sicredi\Utils;
 
 use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\Client;

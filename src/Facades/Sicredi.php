@@ -1,6 +1,6 @@
 <?php
 
-namespace sicredi\Facades;
+namespace Beedelivery\Sicredi\Utils\Facades;
 
 use Illuminate\Support\Facades\Facade;
 

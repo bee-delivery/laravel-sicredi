@@ -1,9 +1,9 @@
 <?php
 
-namespace sicredi\Utils;
+namespace Beedelivery\Sicredi\Utils;
 
 use Carbon\Carbon;
-use sicredi\Utils\Connection;
+use Beedelivery\Sicredi\Utils\Connection;
 
 class BankingConnection extends Connection
 {

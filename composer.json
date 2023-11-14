@@ -1,18 +1,22 @@
 {
-    "name": "thz-costa/laravel-sicredi",
+    "name": "beedelivery/laravel-sicredi",
     "description": "A package to create charges from SICREDI API",
     "keywords": ["sicredi", "laravel", "bank"],
     "type": "library",
     "license": "MIT",
     "autoload": {
         "psr-4": {
-            "ThzCosta\\LaravelSicredi\\": "src/"
+            "Beedelivery\\LaravelSicredi\\": "src/"
         }
     },
-    
     "authors": [
         {
-            "name": "Thomaz Costa"
+            "name": "Bee Delivery",
+            "email": "suporte@beedelivery.com.br"
+        },
+        {
+            "name": "Thomaz Costa",
+            "email": "thomaz.169@hotmail.com"
         }
     ],
     "require": {
@@ -22,10 +26,10 @@
     "extra": {
         "laravel": {
             "providers": [
-                "sicredi\\SicrediServiceProvider"
+                "Beedelivery\\sicredi\\SicrediServiceProvider"
             ],
             "aliases": {
-                "Iza": "sicredi\\Facades\\Sicredi"
+                "Sicredi": "Beedelivery\\sicredi\\Facades\\Sicredi"
             }
         }
     }

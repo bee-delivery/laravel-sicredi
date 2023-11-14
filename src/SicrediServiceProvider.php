@@ -1,6 +1,6 @@
 <?php 
 
-namespace sicredi;
+namespace Beedelivery\Sicredi;
 
 use Illuminate\Support\ServiceProvider;
 

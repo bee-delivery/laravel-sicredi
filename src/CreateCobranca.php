@@ -1,9 +1,9 @@
 <?php
 
-namespace sicredi;
+namespace Beedelivery\Sicredi;
 
-use sicredi\Utils\BankingConnection;
-use sicredi\Utils\Helpers;
+use Beedelivery\Sicredi\Utils\BankingConnection;
+use Beedelivery\Sicredi\Utils\Helpers;
 
 class CreateCobranca
 {
