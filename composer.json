@@ -26,10 +26,10 @@
     "extra": {
         "laravel": {
             "providers": [
-                "Beedelivery\\sicredi\\SicrediServiceProvider"
+                "Beedelivery\\Sicredi\\SicrediServiceProvider"
             ],
             "aliases": {
-                "Sicredi": "Beedelivery\\sicredi\\Facades\\Sicredi"
+                "Sicredi": "Beedelivery\\Sicredi\\Facades\\Sicredi"
             }
         }
     }
