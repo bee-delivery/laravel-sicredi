@@ -6,7 +6,7 @@
     "license": "MIT",
     "autoload": {
         "psr-4": {
-            "Beedelivery\\LaravelSicredi\\": "src/"
+            "Beedelivery\\Sicredi\\": "src/"
         }
     },
     "authors": [
