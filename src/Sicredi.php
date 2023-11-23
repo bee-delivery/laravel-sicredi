@@ -4,13 +4,8 @@ namespace Beedelivery\Sicredi;
 
 class Sicredi
 {
-    public function createCobranca()
+    public function cobranca()
     {
-        return new CreateCobranca();
-    }
-    
-    public function cobrancaDetails()
-    {
-        return new CobrancaDetails();
+        return new Cobranca();
     }
 }

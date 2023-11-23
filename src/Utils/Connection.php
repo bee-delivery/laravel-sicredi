@@ -110,8 +110,9 @@ Class Connection
     public function auth($params)
     {
         try {
-            $certificado = base_path($params['path']);    
-            $client = new Client(['base_uri'  => $params['baseUrl'],'verify' => fopen($certificado, 'r'),]);
+
+            $certificado = base_path(config('certificate_path'));    
+            $client = new Client(['verify' => fopen($certificado, 'r'),]);
             
             $headerAuth = [
                 'Content-Type' => 'application/x-www-form-urlencoded',
@@ -134,7 +135,7 @@ Class Connection
                 ];
             }
 
-            $response = $client->request('POST' , 'auth/openapi/token', [
+            $response = $client->request('POST' , $params['url'] . 'auth/openapi/token', [
                 'headers'     => $headerAuth,
                 'form_params' => $dataAuth,
             ]);

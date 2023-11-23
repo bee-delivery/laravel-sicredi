@@ -5,7 +5,7 @@ namespace Beedelivery\Sicredi;
 use Beedelivery\Sicredi\Utils\BankingConnection;
 use Beedelivery\Sicredi\Utils\Helpers;
 
-class CreateCobranca
+class Cobranca
 {
     use Helpers;
 
@@ -17,7 +17,21 @@ class CreateCobranca
     }
 
 
-    public function createCobranca($params)
+    public function details($codigoBeneficiario,  $sicredId)
+    {
+        try {
+            
+            return $this->response->get("cobranca/boleto/v1/boletos?codigoBeneficiario=$codigoBeneficiario&nossoNumero=$sicredId");
+
+        } catch (\Exception $e) {
+            return [
+                'code' => $e->getCode(),
+                'response' => $e->getMessage()
+            ];
+        }
+    }
+
+    public function create($params)
     {
         try {
             $this->validateCobrancaParams($params);
@@ -31,5 +45,4 @@ class CreateCobranca
             ];
         }
     }
-
 }
