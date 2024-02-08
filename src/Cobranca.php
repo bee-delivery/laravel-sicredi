@@ -47,7 +47,7 @@ class Cobranca
     public function getBoletoPrint($barCode)
     {
         try {
-            $this->validateBarCode($barCode);
+            $this->validateBarCode(['barCode' => $barCode]);
 
             return $this->response->get('cobranca/boleto/v1/boletos/pdf?LinhaDigitavel=' . $barCode);
         } catch (\Exception $e) {
