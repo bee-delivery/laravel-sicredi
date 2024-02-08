@@ -37,4 +37,15 @@ trait Helpers
             throw new \Exception($validator->errors()->first());
         }
     }
+
+    public function validateBarCode($barCode)
+    {
+        $validator = Validator::make($barCode, [
+            'barCode' => 'required|string'
+        ]);
+
+        if ($validator->fails()) {
+            throw new \Exception($validator->errors()->first());
+        }
+    }
 }
