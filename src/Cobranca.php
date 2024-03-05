@@ -49,7 +49,7 @@ class Cobranca
         try {
             $this->validateBarCode(['barCode' => $barCode]);
 
-            return $this->response->get('cobranca/boleto/v1/boletos/pdf?LinhaDigitavel=' . $barCode);
+            return $this->response->getBinario('cobranca/boleto/v1/boletos/pdf?LinhaDigitavel=' . $barCode);
         } catch (\Exception $e) {
             return [
                 'code' => $e->getCode(),

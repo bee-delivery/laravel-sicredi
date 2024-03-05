@@ -44,6 +44,45 @@ Class Connection
         }
     }
 
+    public function getBinario($url, $params = null) 
+    {
+        try {
+            $cliente = new Client();
+
+            $headerCob = [
+                'Content-Type'  => 'application/x-www-form-urlencoded',
+                'Authorization' => $this->accessToken,
+                'Accept'        => '*/*',
+                'x-api-key'     => config('sicredi.x_api_key'),
+                'cooperativa'   => config('sicredi.cooperativa'), //pegar essas infor do env tbm 
+                'posto'         => config('sicredi.posto'),
+            ];   
+
+            if(isset($params)) {
+                $response = $cliente->get(config('sicredi.base_url') . $url, [
+                    'headers'     => $headerCob,
+                    'json' => $params,
+                    ]);      
+            } else {
+                $response = $cliente->get(config('sicredi.base_url') . $url, [
+                    'headers'     => $headerCob,
+                    ]);      
+            }
+            
+            return [
+                'code' => $response->getStatusCode(),
+                'response' => json_decode($response->getBody(), true),
+                'filename' => $response->getHeaderLine('Content-Disposition'),
+                'content' =>  $response->getBody()->getContents(),
+            ];
+        } catch (RequestException $e) {
+            return [
+                'code' => $e->getCode(),
+                'response' => $e->getMessage()
+            ];
+        }
+    }
+
     public function post($url, $params) 
     {
         try {
