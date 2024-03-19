@@ -7,7 +7,12 @@ use Beedelivery\Sicredi\Utils\Connection;
 
 class BankingConnection extends Connection
 {
-    
+    protected $baseUrl;
+    protected $apiKey;
+    protected $username;
+    protected $password;
+    protected $path;
+    protected $accessToken;
 
     public function __construct()
     {
@@ -15,11 +20,11 @@ class BankingConnection extends Connection
             session_start();
         }
 
-        $this->baseUrl  = config('sicredi.base_url');
-        $this->apiKey   = config('sicredi.x_api_key');
-        $this->username = config('sicredi.basic_user');
-        $this->password = config('sicredi.basic_password');
-        $this->path     = config('sicredi.certificate_path');
+        $this->baseUrl  = config('sicredi-pix.base_url');
+        $this->apiKey   = config('sicredi-pix.x_api_key');
+        $this->username = config('sicredi-pix.basic_user');
+        $this->password = config('sicredi-pix.basic_password');
+        $this->path     = config('sicredi-pix.certificate_path');
 
         $this->getAccessToken();
     }
