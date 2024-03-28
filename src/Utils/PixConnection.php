@@ -197,4 +197,43 @@ class PixConnection extends Connection
         }
     }
 
+    public function patch($url, $params = null, $beneficiario, $accessToken)
+    {
+        try {
+
+            $certificado = base_path($this->cert);
+            $certificado_key = base_path($this->certKey);
+            $client = new Client([
+                'verify' => false, // Desativar a verificação SSL, pois estamos fornecendo nossos próprios certificado e chave
+                RequestOptions::CERT => $certificado,
+                RequestOptions::SSL_KEY => [$certificado_key, $this->certPass],
+            ]);
+
+            $headerPix = [
+                'Content-Type'  => 'application/json',
+                'Authorization' => $this->accessToken,
+                'accept'        => '*/*',
+            ];
+
+            if (isset($header)) {
+                $headerPix = array_merge($headerPix, $header);
+            }
+
+            $response = $client->post($this->baseUrl . $url, [
+                'headers'     => $headerPix,
+                'json' => $params,
+            ]);
+
+            return [
+                'code' => $response->getStatusCode(),
+                'response' => json_decode($response->getBody(), true)
+            ];
+        } catch (RequestException $e) {
+            return [
+                'code' => $e->getCode(),
+                'response' => $e->getMessage()
+            ];
+        }
+    }
+
 }

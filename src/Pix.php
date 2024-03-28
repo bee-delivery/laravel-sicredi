@@ -28,7 +28,7 @@ class Pix
             $params = array_merge($params, $conta);
             $this->validateCreatePixParams($params);
 
-            
+
             return $this->response->post('multipag/v1/pagamentos/pix/chave', $params);
         } catch (\Exception $e) {
             return [
@@ -41,7 +41,7 @@ class Pix
     /**
      * Recupera os detalhes de um pix
      * [GET] /multipag/v1/pagamentos/pix/{idTransacao}
-     * @param array $idTransacao
+     * @param string $idTransacao
      * @return array
      */
     public function getPayment($idTransacao)
@@ -64,7 +64,7 @@ class Pix
     /**
      * Cancela um pagamento agendado de pix
      * [POST] /multipag/v1/pagamentos/pix/cancelamentos
-     * @param array $idTransacao
+     * @param string $idTransacao
      * @return array
      */
     public function cancelPayment($idTransacao)
@@ -76,7 +76,7 @@ class Pix
                 'cooperativa' => config('sicredi-pix.cooperativa'),
                 'documento' => config('sicredi-pix.documento'),
             ];
-            
+
             return $this->response->post('multipag/v1/pagamentos/pix/cancelamentos', $params);
         } catch (\Exception $e) {
             return [
