@@ -57,10 +57,13 @@ trait Helpers
     public function validateCreatePixParams($params)
     {
         $validator = Validator::make($params, [
+            'conta' => 'required|string',
+            'cooperativa' => 'required|string',
+            'documento' => 'required|string',
             'chavePix' => 'required|string',
             'documentoBeneficiario' => 'required|string',
             'dataPagamento' => 'required|string',
-            'valorPagamento' => 'required|regex:/^\d+(\.\d{2})?$/',
+            'valorPagamento' => 'required|regex:^\d+(\.\d+)?$^',
             'identificadorPagamentoAssociado' => 'required|string',
             'mensagemPix' => 'required|string',
             'idTransacao' => 'required|string',
