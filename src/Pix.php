@@ -16,12 +16,20 @@ class Pix
         $this->response = new PixConnection();
     }
 
-    public function create($params)
+    //Criar pagamento Pix via Chave
+    public function createPayment($params)
     {
         try {
+            $conta = [
+                'conta' => config('sicredi-pix.conta'),
+                'cooperativa' => config('sicredi-pix.cooperativa'),
+                'documento' => config('sicredi-pix.documento'),
+            ];
+            
             $this->validateCreatePixParams($params);
 
-            return $this->response->post('v2/pix/pagamentos', $params);
+            
+            return $this->response->post('multipag/v1/pagamentos/pix/chave', $params);
         } catch (\Exception $e) {
             return [
                 'code' => $e->getCode(),

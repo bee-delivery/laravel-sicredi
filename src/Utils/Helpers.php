@@ -49,7 +49,7 @@ trait Helpers
         }
     }
     /*
-     * Valida dados para criacao de cobrancas.
+     * Valida dados para criacao de pagamento pix via chave.
      *
      * @param array $params
      * @return void
@@ -57,13 +57,13 @@ trait Helpers
     public function validateCreatePixParams($params)
     {
         $validator = Validator::make($params, [
-            'agenciaOrigem' => 'required|string',
-            'contaOrigem' => 'required|string',
-            'postoOrigem' => 'required|string',
             'chavePix' => 'required|string',
-            'documentoDestinatario' => 'required|string',
-            'idRastreio' => 'required|string',
-            'valor' => 'required|regex:/^\d+(\.\d{2})?$/'
+            'documentoBeneficiario' => 'required|string',
+            'dataPagamento' => 'required|string',
+            'valorPagamento' => 'required|regex:/^\d+(\.\d{2})?$/',
+            'IdentificadorPagamentoAssociado' => 'required|string',
+            'mensagemPix' => 'required|string',
+            'idTransacao' => 'required|string',
         ]);
         
         if ($validator->fails()) {
