@@ -73,26 +73,4 @@ trait Helpers
             throw new \Exception($validator->errors()->first());
         }
     }
-
-    /**
-     * Valida se tem ids ou idsRastreio, ao menos um deles é obrigatório.
-     *
-     * @param array $params
-     * @return void
-     */
-    public function validateQueryParams($params)
-    {
-        $validator = Validator::make($params, [
-            'filtro.ids' => 'nullable|array',
-            'filtro.idsRastreio' => 'nullable|array',
-            'agenciaOrigem' => 'required|string',
-            'contaOrigem' => 'required|string',
-            'postoOrigem' => 'required|string',
-            'pagina' => 'required|integer'
-        ]);
-        
-        if ($validator->fails()) {
-            throw new \Exception($validator->errors()->first());
-        }
-    }
 }

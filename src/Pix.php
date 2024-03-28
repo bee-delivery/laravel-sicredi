@@ -40,17 +40,44 @@ class Pix
 
     /**
      * Recupera os detalhes de um pix
-     *[POST] /v2/pix/consultas
-     * Descrição: Pesquisa de pagamentos utilizando uma lista de ids ou de idsRastreio como critério.
-     * @param array $params
+     * [GET] /multipag/v1/pagamentos/pix/{idTransacao}
+     * @param array $idTransacao
      * @return array
      */
-    public function query($params)
+    public function getPayment($idTransacao)
     {
         try {
-            $this->validateQueryParams($params);
+            $header = [
+                'x-cooperativa' => config('sicredi-pix.cooperativa'),
+                'x-conta' => config('sicredi-pix.conta'),
+                'x-documento' => config('sicredi-pix.documento'),
+            ];
+            return $this->response->get('multipag/v1/pagamentos/pix/' . $idTransacao, null, $header);
+        } catch (\Exception $e) {
+            return [
+                'code' => $e->getCode(),
+                'response' => $e->getMessage()
+            ];
+        }
+    }
 
-            return $this->response->post('v2/pix/consultas', $params);
+    /**
+     * Cancela um pagamento agendado de pix
+     * [POST] /multipag/v1/pagamentos/pix/cancelamentos
+     * @param array $idTransacao
+     * @return array
+     */
+    public function cancelPayment($idTransacao)
+    {
+        try {
+            $params = [
+                'idTransacao' => $idTransacao,
+                'conta' => config('sicredi-pix.conta'),
+                'cooperativa' => config('sicredi-pix.cooperativa'),
+                'documento' => config('sicredi-pix.documento'),
+            ];
+            
+            return $this->response->post('multipag/v1/pagamentos/pix/cancelamentos', $params);
         } catch (\Exception $e) {
             return [
                 'code' => $e->getCode(),
