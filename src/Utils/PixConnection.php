@@ -117,7 +117,13 @@ class PixConnection extends Connection
     public function get($url, $params = null, $header = null)
     {
         try {
-            $cliente = new Client();
+            $certificado = base_path($this->cert);
+            $certificado_key = base_path($this->cert_key);
+            $client = new Client([
+                'verify' => false, // Desativar a verificação SSL, pois estamos fornecendo nossos próprios certificado e chave
+                RequestOptions::CERT => $certificado,
+                RequestOptions::SSL_KEY => [$certificado_key, $this->cert_pass],
+            ]);
 
             $headerPix = [
                 'Content-Type'  => 'application/x-www-form-urlencoded',
@@ -130,12 +136,12 @@ class PixConnection extends Connection
             }
 
             if (isset($params)) {
-                $response = $cliente->get($this->baseUrl . $url, [
+                $response = $client->get($this->baseUrl . $url, [
                     'headers'     => $headerPix,
                     'json' => $params,
                 ]);
             } else {
-                $response = $cliente->get($this->baseUrl . $url, [
+                $response = $client->get($this->baseUrl . $url, [
                     'headers'     => $headerPix,
                 ]);
             }
@@ -155,7 +161,14 @@ class PixConnection extends Connection
     public function post($url, $params, $header = null)
     {
         try {
-            $cliente = new Client();
+
+            $certificado = base_path($this->cert);
+            $certificado_key = base_path($this->cert_key);
+            $client = new Client([
+                'verify' => false, // Desativar a verificação SSL, pois estamos fornecendo nossos próprios certificado e chave
+                RequestOptions::CERT => $certificado,
+                RequestOptions::SSL_KEY => [$certificado_key, $this->cert_pass],
+            ]);
 
             $headerPix = [
                 'Content-Type'  => 'application/x-www-form-urlencoded',
@@ -167,7 +180,7 @@ class PixConnection extends Connection
                 $headerPix = array_merge($headerPix, $header);
             }
 
-            $response = $cliente->post($this->baseUrl . $url, [
+            $response = $client->post($this->baseUrl . $url, [
                 'headers'     => $headerPix,
                 'json' => $params,
             ]);

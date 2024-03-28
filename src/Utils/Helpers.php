@@ -61,7 +61,7 @@ trait Helpers
             'documentoBeneficiario' => 'required|string',
             'dataPagamento' => 'required|string',
             'valorPagamento' => 'required|regex:/^\d+(\.\d{2})?$/',
-            'IdentificadorPagamentoAssociado' => 'required|string',
+            'identificadorPagamentoAssociado' => 'required|string',
             'mensagemPix' => 'required|string',
             'idTransacao' => 'required|string',
         ]);
