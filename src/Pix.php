@@ -77,7 +77,7 @@ class Pix
                 'documento' => config('sicredi-pix.documento'),
             ];
 
-            return $this->response->post('multipag/v1/pagamentos/pix/cancelamentos', $params);
+            return $this->response->patch('multipag/v1/pagamentos/pix/cancelamentos', $params, null, null);
         } catch (\Exception $e) {
             return [
                 'code' => $e->getCode(),
