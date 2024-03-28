@@ -219,7 +219,7 @@ class PixConnection extends Connection
                 $headerPix = array_merge($headerPix, $header);
             }
 
-            $response = $client->post($this->baseUrl . $url, [
+            $response = $client->patch($this->baseUrl . $url, [
                 'headers'     => $headerPix,
                 'json' => $params,
             ]);
