@@ -25,7 +25,7 @@ class Pix
                 'cooperativa' => config('sicredi-pix.cooperativa'),
                 'documento' => config('sicredi-pix.documento'),
             ];
-            
+            $params = array_merge($params, $conta);
             $this->validateCreatePixParams($params);
 
             

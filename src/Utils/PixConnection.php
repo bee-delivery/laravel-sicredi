@@ -14,8 +14,8 @@ class PixConnection extends Connection
     protected $username;
     protected $password;
     protected $cert;
-    protected $cert_key;
-    protected $cert_pass;
+    protected $certKey;
+    protected $certPass;
     protected $accessToken;
 
     public function __construct()
@@ -28,8 +28,8 @@ class PixConnection extends Connection
         $this->username =  config('sicredi-pix.client_id');
         $this->password =  config('sicredi-pix.client_secret');
         $this->cert     =  config('sicredi-pix.certificate_path');
-        $this->cert_key =  config('sicredi-pix.cert_key_path');
-        $this->cert_pass = config('sicredi-pix.cert_key_pass');
+        $this->certKey  =  config('sicredi-pix.cert_key_path');
+        $this->certPass = config('sicredi-pix.cert_key_pass');
 
         $this->getAccessToken();
     }
@@ -42,7 +42,7 @@ class PixConnection extends Connection
 
         if (isset($_SESSION["sicrediTokenPix"])) {
             $token = $_SESSION["sicrediTokenPix"];
-            
+
             $diffInSeconds = Carbon::parse($token['created_at'])->diffInSeconds(now());
 
             if ($diffInSeconds <= $token['expires_in']) {
@@ -69,7 +69,7 @@ class PixConnection extends Connection
 
             $_SESSION["sicrediTokenPix"] = $token;
         }
-        
+
         $this->accessToken = $token['token_type'].' '.$token['access_token'];
         return $this->accessToken;
     }
@@ -79,11 +79,11 @@ class PixConnection extends Connection
         try {
 
             $certificado = base_path($this->cert);
-            $certificado_key = base_path($this->cert_key);
+            $certificado_key = base_path($this->certKey);
             $client = new Client([
                 'verify' => false, // Desativar a verificação SSL, pois estamos fornecendo nossos próprios certificado e chave
                 RequestOptions::CERT => $certificado,
-                RequestOptions::SSL_KEY => [$certificado_key, $this->cert_pass],
+                RequestOptions::SSL_KEY => [$certificado_key, $this->certPass],
             ]);
 
             $headerAuth = [
@@ -96,7 +96,7 @@ class PixConnection extends Connection
                 'client_secret' => $params['password'],
                 'scope' => 'multipag.boleto.pagar multipag.boleto.consultar multipag.tributos.pagar multipag.tributos.consultar multipag.pix.pagar multipag.pix.consultar'
             ];
-        
+
             $response = $client->request('POST', $params['url'] . 'thirdparty/auth/token', [
                 'headers'     => $headerAuth,
                 'form_params' => $dataAuth,
@@ -118,17 +118,17 @@ class PixConnection extends Connection
     {
         try {
             $certificado = base_path($this->cert);
-            $certificado_key = base_path($this->cert_key);
+            $certificado_key = base_path($this->certKey);
             $client = new Client([
                 'verify' => false, // Desativar a verificação SSL, pois estamos fornecendo nossos próprios certificado e chave
                 RequestOptions::CERT => $certificado,
-                RequestOptions::SSL_KEY => [$certificado_key, $this->cert_pass],
+                RequestOptions::SSL_KEY => [$certificado_key, $this->certPass],
             ]);
 
             $headerPix = [
-                'Content-Type'  => 'application/x-www-form-urlencoded',
+                'Content-Type'  => 'application/json',
                 'Authorization' => $this->accessToken,
-                'accept'        => 'application/json',
+                'accept'        => '*/*',
             ];
 
             if (isset($header)) {
@@ -163,17 +163,17 @@ class PixConnection extends Connection
         try {
 
             $certificado = base_path($this->cert);
-            $certificado_key = base_path($this->cert_key);
+            $certificado_key = base_path($this->certKey);
             $client = new Client([
                 'verify' => false, // Desativar a verificação SSL, pois estamos fornecendo nossos próprios certificado e chave
                 RequestOptions::CERT => $certificado,
-                RequestOptions::SSL_KEY => [$certificado_key, $this->cert_pass],
+                RequestOptions::SSL_KEY => [$certificado_key, $this->certPass],
             ]);
 
             $headerPix = [
-                'Content-Type'  => 'application/x-www-form-urlencoded',
+                'Content-Type'  => 'application/json',
                 'Authorization' => $this->accessToken,
-                'accept'        => 'application/json',
+                'accept'        => '*/*',
             ];
 
             if (isset($header)) {
