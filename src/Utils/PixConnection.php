@@ -6,13 +6,16 @@ use Carbon\Carbon;
 use Beedelivery\Sicredi\Utils\Connection;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\RequestException;
+use GuzzleHttp\RequestOptions;
 
 class PixConnection extends Connection
 {
     protected $baseUrl;
     protected $username;
     protected $password;
-    protected $path;
+    protected $cert;
+    protected $cert_key;
+    protected $cert_pass;
     protected $accessToken;
 
     public function __construct()
@@ -21,10 +24,12 @@ class PixConnection extends Connection
             session_start();
         }
 
-        $this->baseUrl  = config('sicredi-pix.base_url');
-        $this->username = config('sicredi-pix.client_id');
-        $this->password = config('sicredi-pix.client_secret');
-        $this->path     = config('sicredi-pix.certificate_path');
+        $this->baseUrl  =  config('sicredi-pix.base_url');
+        $this->username =  config('sicredi-pix.client_id');
+        $this->password =  config('sicredi-pix.client_secret');
+        $this->cert     =  config('sicredi-pix.certificate_path');
+        $this->cert_key =  config('sicredi-pix.cert_key_path');
+        $this->cert_pass = config('sicredi-pix.cert_key_pass');
 
         $this->getAccessToken();
     }
@@ -73,8 +78,13 @@ class PixConnection extends Connection
     {
         try {
 
-            $certificado = base_path($this->path);
-            $client = new Client(['verify' => fopen($certificado, 'r'),]);
+            $certificado = base_path($this->cert);
+            $certificado_key = base_path($this->cert_key);
+            $client = new Client([
+                'verify' => false, // Desativar a verificação SSL, pois estamos fornecendo nossos próprios certificado e chave
+                RequestOptions::CERT => $certificado,
+                RequestOptions::SSL_KEY => [$certificado_key, $this->cert_pass],
+            ]);
 
             $headerAuth = [
                 'Content-Type' => 'application/x-www-form-urlencoded',
@@ -84,7 +94,7 @@ class PixConnection extends Connection
                 'grant_type' => 'client_credentials',
                 'client_id' => $params['username'],
                 'client_secret' => $params['password'],
-                'scope' => 'cmultipag.boleto.pagar multipag.boleto.consultar multipag.tributos.pagar multipag.tributos.consultar multipag.pix.pagar multipag.pix.consultar'
+                'scope' => 'multipag.boleto.pagar multipag.boleto.consultar multipag.tributos.pagar multipag.tributos.consultar multipag.pix.pagar multipag.pix.consultar'
             ];
         
             $response = $client->request('POST', $params['url'] . 'thirdparty/auth/token', [
