@@ -7,6 +7,12 @@ use GuzzleHttp\Client;
 
 class Connection
 {
+    protected $baseUrl;
+    protected $apiKey;
+    protected $username;
+    protected $password;
+    protected $path;
+    protected $accessToken;
     public function get($url, $params = null)
     {
         try {
@@ -15,18 +21,18 @@ class Connection
             $headerCob = [
                 'Content-Type'  => 'application/x-www-form-urlencoded',
                 'Authorization' => $this->accessToken,
-                'x-api-key'     => config('sicredi.x_api_key'),
+                'x-api-key'     => $this->apiKey,
                 'cooperativa'   => config('sicredi.cooperativa'), //pegar essas infor do env tbm 
                 'posto'         => config('sicredi.posto'),
             ];
 
             if (isset($params)) {
-                $response = $cliente->get(config('sicredi.base_url') . $url, [
+                $response = $cliente->get($this->baseUrl . $url, [
                     'headers'     => $headerCob,
                     'json' => $params,
                 ]);
             } else {
-                $response = $cliente->get(config('sicredi.base_url') . $url, [
+                $response = $cliente->get($this->baseUrl . $url, [
                     'headers'     => $headerCob,
                 ]);
             }
@@ -52,18 +58,18 @@ class Connection
                 'Content-Type'  => 'application/x-www-form-urlencoded',
                 'Authorization' => $this->accessToken,
                 'Accept'        => '*/*',
-                'x-api-key'     => config('sicredi.x_api_key'),
+                'x-api-key'     => $this->apiKey,
                 'cooperativa'   => config('sicredi.cooperativa'), //pegar essas infor do env tbm 
                 'posto'         => config('sicredi.posto'),
             ];
 
             if (isset($params)) {
-                $response = $cliente->get(config('sicredi.base_url') . $url, [
+                $response = $cliente->get($this->baseUrl . $url, [
                     'headers'     => $headerCob,
                     'json' => $params,
                 ]);
             } else {
-                $response = $cliente->get(config('sicredi.base_url') . $url, [
+                $response = $cliente->get($this->baseUrl . $url, [
                     'headers'     => $headerCob,
                 ]);
             }
@@ -88,12 +94,12 @@ class Connection
             $headerCob = [
                 'Content-Type'  => 'application/json',
                 'Authorization' => $this->accessToken,
-                'x-api-key'     => config('sicredi.x_api_key'),
+                'x-api-key'     => $this->apiKey,
                 'cooperativa'   => config('sicredi.cooperativa'),
                 'posto'         => config('sicredi.posto'),
             ];
 
-            $response = $cliente->post(config('sicredi.base_url') . $url, [
+            $response = $cliente->post($this->baseUrl . $url, [
                 'headers'     => $headerCob,
                 'json' => $params,
             ]);
@@ -119,12 +125,12 @@ class Connection
                 'Content-Type'  => 'application/json',
                 'Authorization' => $accessToken,
                 'codigoBeneficiario' => $beneficiario,
-                'x-api-key'     => config('sicredi.x_api_key'),
+                'x-api-key'     => $this->apiKey,
                 'cooperativa'   => config('sicredi.cooperativa'),
                 'posto'         => config('sicredi.posto'),
             ];
 
-            $response = $cliente->patch(config('sicredi.base_url') . $url, [
+            $response = $cliente->patch($this->baseUrl . $url, [
                 'headers'     => $headerCob,
                 'json' => $params,
             ]);
@@ -145,7 +151,7 @@ class Connection
     {
         try {
 
-            $certificado = base_path(config('certificate_path'));
+            $certificado = base_path($this->path);
             $client = new Client(['verify' => fopen($certificado, 'r'),]);
 
             $headerAuth = [

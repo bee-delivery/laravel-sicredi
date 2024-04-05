@@ -17,6 +17,7 @@ class SicrediServiceProvider extends ServiceProvider
     public function register()
     {
         $this->mergeConfigFrom(__DIR__ . '/config/sicredi.php', 'sicredi');
+        $this->mergeConfigFrom(__DIR__ . '/config/sicredi-pix.php', 'sicredi-pix');
 
         $this->app->singleton('sicredi', function ($app) {
             return new Sicredi;

@@ -37,13 +37,38 @@ trait Helpers
             throw new \Exception($validator->errors()->first());
         }
     }
-
+   
     public function validateBarCode($barCode)
     {
         $validator = Validator::make($barCode, [
             'barCode' => 'required|string'
         ]);
 
+        if ($validator->fails()) {
+            throw new \Exception($validator->errors()->first());
+        }
+    }
+    /*
+     * Valida dados para criacao de pagamento pix via chave.
+     *
+     * @param array $params
+     * @return void
+     */
+    public function validateCreatePixParams($params)
+    {
+        $validator = Validator::make($params, [
+            'conta' => 'required|string',
+            'cooperativa' => 'required|string',
+            'documento' => 'required|string',
+            'chavePix' => 'required|string',
+            'documentoBeneficiario' => 'required|string',
+            'dataPagamento' => 'required|string',
+            'valorPagamento' => 'required|regex:^\d+(\.\d+)?$^',
+            'identificadorPagamentoAssociado' => 'required|string',
+            'mensagemPix' => 'required|string',
+            'idTransacao' => 'required|string',
+        ]);
+        
         if ($validator->fails()) {
             throw new \Exception($validator->errors()->first());
         }

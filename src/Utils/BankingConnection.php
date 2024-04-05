@@ -7,12 +7,7 @@ use Beedelivery\Sicredi\Utils\Connection;
 
 class BankingConnection extends Connection
 {
-    protected $baseUrl;
-    protected $apiKey;
-    protected $username;
-    protected $password;
-    protected $path;
-    protected $accessToken;
+    
 
     public function __construct()
     {
@@ -29,11 +24,11 @@ class BankingConnection extends Connection
         $this->getAccessToken();
     }
 
-/*
-    Recupera o Access Token caso exista ou gera um novo
-*/
+    /*
+        Recupera o Access Token caso exista ou gera um novo
+    */
     public function getAccessToken()
-    {  
+    {
 
         if (isset($_SESSION["sicrediToken"])) {
             $token = $_SESSION["sicrediToken"];
