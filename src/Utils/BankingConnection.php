@@ -53,14 +53,9 @@ class BankingConnection extends Connection
                 $response = $this->auth($params);
 
                 if($response['code'] == 200){
-                    $token['id_token'] = $response['response']['id_token'];
-                    $token['token_type'] = $response['response']['token_type'];
-                    $token['access_token'] = $response['response']['access_token'];
-                    $token['expires_in'] = $response['response']['expires_in'];
-                    $token['refresh_token'] = $response['response']['refresh_token'];
-                    $token['refresh_expires_in'] = $response['response']['refresh_expires_in'];
-                    $token['scope'] = $response['response']['scope'];
+                    $token = $response['response'];
                     $token['created_at'] = now();
+
 
                     $_SESSION["sicrediToken"] = $token;
 
@@ -82,13 +77,7 @@ class BankingConnection extends Connection
         $response = $this->auth($params);
 
         if($response['code'] == 200){
-            $token['id_token'] = $response['response']['id_token'];
-            $token['token_type'] = $response['response']['token_type'];
-            $token['access_token'] = $response['response']['access_token'];
-            $token['expires_in'] = $response['response']['expires_in'];
-            $token['refresh_token'] = $response['response']['refresh_token'];
-            $token['refresh_expires_in'] = $response['response']['refresh_expires_in'];
-            $token['scope'] = $response['response']['scope'];
+            $token = $response['response'];
             $token['created_at'] = now();
 
             $_SESSION["sicrediToken"] = $token;
