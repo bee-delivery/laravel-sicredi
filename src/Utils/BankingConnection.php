@@ -15,11 +15,11 @@ class BankingConnection extends Connection
             session_start();
         }
 
-        $this->baseUrl  = config('sicredi.base_url');
-        $this->apiKey   = config('sicredi.x_api_key');
-        $this->username = config('sicredi.basic_user');
-        $this->password = config('sicredi.basic_password');
-        $this->path     = config('sicredi.certificate_path');
+        $this->baseUrl    = config('sicredi.base_url');
+        $this->apiKey     = config('sicredi.x_api_key');
+        $this->username   = config('sicredi.basic_user');
+        $this->password   = config('sicredi.basic_password');
+        $this->verify_ssl = config('sicredi.verify_ssl');
 
         $this->getAccessToken();
     }
@@ -46,7 +46,7 @@ class BankingConnection extends Connection
                     'apiKey'    => $this->apiKey,
                     'username'  => $this->username,
                     'password'  => $this->password,
-                    'path'      => $this->path,
+                    'verify_ssl'=> $this->verify_ssl,
                     'refresh'   => $token['refresh_token']
                 ];
 
@@ -71,7 +71,7 @@ class BankingConnection extends Connection
             'apiKey'    => $this->apiKey,
             'username'  => $this->username,
             'password'  => $this->password,
-            'path'      => $this->path,
+            'verify_ssl'=> $this->verify_ssl,
         ];
 
         $response = $this->auth($params);
