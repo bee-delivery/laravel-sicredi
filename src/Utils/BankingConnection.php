@@ -15,11 +15,11 @@ class BankingConnection extends Connection
             session_start();
         }
 
-        $this->baseUrl  = config('sicredi.base_url');
-        $this->apiKey   = config('sicredi.x_api_key');
-        $this->username = config('sicredi.basic_user');
-        $this->password = config('sicredi.basic_password');
-        $this->path     = config('sicredi.certificate_path');
+        $this->baseUrl    = config('sicredi.base_url');
+        $this->apiKey     = config('sicredi.x_api_key');
+        $this->username   = config('sicredi.basic_user');
+        $this->password   = config('sicredi.basic_password');
+        $this->verify_ssl = config('sicredi.verify_ssl');
 
         $this->getAccessToken();
     }
@@ -46,21 +46,16 @@ class BankingConnection extends Connection
                     'apiKey'    => $this->apiKey,
                     'username'  => $this->username,
                     'password'  => $this->password,
-                    'path'      => $this->path,
+                    'verify_ssl'=> $this->verify_ssl,
                     'refresh'   => $token['refresh_token']
                 ];
 
                 $response = $this->auth($params);
 
                 if($response['code'] == 200){
-                    $token['id_token'] = $response['response']['id_token'];
-                    $token['token_type'] = $response['response']['token_type'];
-                    $token['access_token'] = $response['response']['access_token'];
-                    $token['expires_in'] = $response['response']['expires_in'];
-                    $token['refresh_token'] = $response['response']['refresh_token'];
-                    $token['refresh_expires_in'] = $response['response']['refresh_expires_in'];
-                    $token['scope'] = $response['response']['scope'];
+                    $token = $response['response'];
                     $token['created_at'] = now();
+
 
                     $_SESSION["sicrediToken"] = $token;
 
@@ -76,19 +71,13 @@ class BankingConnection extends Connection
             'apiKey'    => $this->apiKey,
             'username'  => $this->username,
             'password'  => $this->password,
-            'path'      => $this->path,
+            'verify_ssl'=> $this->verify_ssl,
         ];
 
         $response = $this->auth($params);
 
         if($response['code'] == 200){
-            $token['id_token'] = $response['response']['id_token'];
-            $token['token_type'] = $response['response']['token_type'];
-            $token['access_token'] = $response['response']['access_token'];
-            $token['expires_in'] = $response['response']['expires_in'];
-            $token['refresh_token'] = $response['response']['refresh_token'];
-            $token['refresh_expires_in'] = $response['response']['refresh_expires_in'];
-            $token['scope'] = $response['response']['scope'];
+            $token = $response['response'];
             $token['created_at'] = now();
 
             $_SESSION["sicrediToken"] = $token;
