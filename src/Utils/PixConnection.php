@@ -153,6 +153,11 @@ class PixConnection extends Connection
         } catch (RequestException $e) {
             return [
                 'code' => $e->getCode(),
+                'response' => $e->getResponse()->getBody()->getContents()
+            ];
+        } catch (\Exception $e) {
+            return [
+                'code' => $e->getCode(),
                 'response' => $e->getMessage()
             ];
         }
