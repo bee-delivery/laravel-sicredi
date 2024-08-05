@@ -11,7 +11,7 @@ class Connection
     protected $apiKey;
     protected $username;
     protected $password;
-    protected $path;
+    protected $verify_ssl;
     protected $accessToken;
     public function get($url, $params = null)
     {
@@ -151,8 +151,20 @@ class Connection
     {
         try {
 
-            $certificado = base_path($this->path);
-            $client = new Client(['verify' => fopen($certificado, 'r'),]);
+            $options = [];
+            if ($this->verify_ssl && is_string($this->verify_ssl)) {
+                $certificado = base_path($this->verify_ssl);
+                if (!file_exists($certificado)) {
+                    throw new \Exception("Certificado não encontrado em {$certificado}");
+                }
+                $options = ['verify' => fopen($certificado, 'r')];
+            }
+
+            if ($this->verify_ssl && is_bool($this->verify_ssl)) {
+                $options = ['verify' => $this->verify_ssl];
+            }
+
+            $client = new Client($options);
 
             $headerAuth = [
                 'Content-Type' => 'application/x-www-form-urlencoded',
@@ -187,6 +199,11 @@ class Connection
         } catch (RequestException $e) {
             return [
                 'code' => $e->getCode(),
+                'response' => $e->getMessage()
+            ];
+        } catch (\Exception $e) {
+            return [
+                'code' => 500,
                 'response' => $e->getMessage()
             ];
         }
