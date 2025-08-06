@@ -17,19 +17,46 @@ class PixConnection extends Connection
     protected $certKey;
     protected $certPass;
     protected $accessToken;
+    protected $alias;
+    protected $cooperativa;
+    protected $conta;
+    protected $documento;
 
-    public function __construct()
+    public function __construct($alias = null)
     {
         if (session_status() === PHP_SESSION_NONE) {
             session_start();
         }
 
-        $this->baseUrl  =  config('sicredi-pix.base_url');
-        $this->username =  config('sicredi-pix.client_id');
-        $this->password =  config('sicredi-pix.client_secret');
-        $this->cert     =  config('sicredi-pix.certificate_path');
-        $this->certKey  =  config('sicredi-pix.cert_key_path');
-        $this->certPass = config('sicredi-pix.cert_key_pass');
+        $this->alias = $alias;
+        $config = null;
+
+        if ($alias && config('sicredi-pix.accounts.' . $alias)) {
+            $config = config('sicredi-pix.accounts.' . $alias);
+        } else {
+            // retrocompatibilidade
+            $config = [
+                'base_url'         => config('sicredi-pix.base_url'),
+                'client_id'        => config('sicredi-pix.client_id'),
+                'client_secret'    => config('sicredi-pix.client_secret'),
+                'certificate_path' => config('sicredi-pix.certificate_path'),
+                'cert_key_path'    => config('sicredi-pix.cert_key_path'),
+                'cert_key_pass'    => config('sicredi-pix.cert_key_pass'),
+                'cooperativa'      => config('sicredi-pix.cooperativa'),
+                'conta'            => config('sicredi-pix.conta'),
+                'documento'        => config('sicredi-pix.documento'),
+            ];
+        }
+
+        $this->baseUrl  = $config['base_url'];
+        $this->username = $config['client_id'];
+        $this->password = $config['client_secret'];
+        $this->cert     = $config['certificate_path'];
+        $this->certKey  = $config['cert_key_path'];
+        $this->certPass = $config['cert_key_pass'];
+        $this->cooperativa = $config['cooperativa'] ?? null;
+        $this->conta = $config['conta'] ?? null;
+        $this->documento = $config['documento'] ?? null;
 
         $this->getAccessToken();
     }
@@ -39,12 +66,11 @@ class PixConnection extends Connection
 */
     public function getAccessToken()
     {
+        $sessionKey = $this->alias ? "sicrediTokenPix_{$this->alias}" : "sicrediTokenPix";
 
-        if (isset($_SESSION["sicrediTokenPix"])) {
-            $token = $_SESSION["sicrediTokenPix"];
-
+        if (isset($_SESSION[$sessionKey])) {
+            $token = $_SESSION[$sessionKey];
             $diffInSeconds = Carbon::parse($token['created_at'])->diffInSeconds(now());
-
             if ($diffInSeconds <= $token['expires_in']) {
                 $this->accessToken = $token['token_type'].' '.$token['access_token'];
                 return $this->accessToken;
@@ -67,7 +93,7 @@ class PixConnection extends Connection
             $token['scope'] = $response['response']['scope'];
             $token['created_at'] = now();
 
-            $_SESSION["sicrediTokenPix"] = $token;
+            $_SESSION[$sessionKey] = $token;
         }
 
         $this->accessToken = $token['token_type'].' '.$token['access_token'];
