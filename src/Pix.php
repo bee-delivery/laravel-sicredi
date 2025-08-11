@@ -10,22 +10,36 @@ class Pix
     use Helpers;
 
     protected $response;
+    protected $alias;
+    protected $contaData;
 
-    public function __construct()
+    public function __construct($alias = null)
     {
-        $this->response = new PixConnection();
+        $this->alias = $alias;
+        $this->response = new PixConnection($alias);
+
+        // Busca dados da conta do alias ou padrão
+        if ($alias && config('sicredi-pix.accounts.' . $alias)) {
+            $conf = config('sicredi-pix.accounts.' . $alias);
+            $this->contaData = [
+                'conta' => $conf['conta'] ?? null,
+                'cooperativa' => $conf['cooperativa'] ?? null,
+                'documento' => $conf['documento'] ?? null,
+            ];
+        } else {
+            $this->contaData = [
+                'conta' => config('sicredi-pix.conta'),
+                'cooperativa' => config('sicredi-pix.cooperativa'),
+                'documento' => config('sicredi-pix.documento'),
+            ];
+        }
     }
 
     //Criar pagamento Pix via Chave
     public function createPayment($params)
     {
         try {
-            $conta = [
-                'conta' => config('sicredi-pix.conta'),
-                'cooperativa' => config('sicredi-pix.cooperativa'),
-                'documento' => config('sicredi-pix.documento'),
-            ];
-            $params = array_merge($params, $conta);
+            $params = array_merge($params, $this->contaData);
             $this->validateCreatePixParams($params);
 
 
@@ -48,9 +62,9 @@ class Pix
     {
         try {
             $header = [
-                'x-cooperativa' => config('sicredi-pix.cooperativa'),
-                'x-conta' => config('sicredi-pix.conta'),
-                'x-documento' => config('sicredi-pix.documento'),
+                'x-cooperativa' => $this->contaData['cooperativa'],
+                'x-conta' => $this->contaData['conta'],
+                'x-documento' => $this->contaData['documento'],
             ];
             return $this->response->get('multipag/v1/pagamentos/pix/' . $idTransacao, null, $header);
         } catch (\Exception $e) {
@@ -72,9 +86,9 @@ class Pix
         try {
             $params = [
                 'idTransacao' => $idTransacao,
-                'conta' => config('sicredi-pix.conta'),
-                'cooperativa' => config('sicredi-pix.cooperativa'),
-                'documento' => config('sicredi-pix.documento'),
+                'conta' => $this->contaData['conta'],
+                'cooperativa' => $this->contaData['cooperativa'],
+                'documento' => $this->contaData['documento'],
             ];
 
             return $this->response->patch('multipag/v1/pagamentos/pix/cancelamentos', $params, null, null);

@@ -9,8 +9,8 @@ class Sicredi
         return new Cobranca();
     }
 
-    public function pix()
+    public function pix($alias = null)
     {
-        return new Pix();
+        return new Pix($alias);
     }
 }
