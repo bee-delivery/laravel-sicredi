@@ -13,6 +13,9 @@ class Connection
     protected $password;
     protected $path;
     protected $accessToken;
+    protected $cooperativa;
+    protected $posto;
+    
     public function get($url, $params = null)
     {
         try {
@@ -22,8 +25,8 @@ class Connection
                 'Content-Type'  => 'application/x-www-form-urlencoded',
                 'Authorization' => $this->accessToken,
                 'x-api-key'     => $this->apiKey,
-                'cooperativa'   => config('sicredi.cooperativa'), //pegar essas infor do env tbm 
-                'posto'         => config('sicredi.posto'),
+                'cooperativa'   => $this->cooperativa,
+                'posto'         => $this->posto,
             ];
 
             if (isset($params)) {
@@ -59,8 +62,8 @@ class Connection
                 'Authorization' => $this->accessToken,
                 'Accept'        => '*/*',
                 'x-api-key'     => $this->apiKey,
-                'cooperativa'   => config('sicredi.cooperativa'), //pegar essas infor do env tbm 
-                'posto'         => config('sicredi.posto'),
+                'cooperativa'   => $this->cooperativa,
+                'posto'         => $this->posto,
             ];
 
             if (isset($params)) {
@@ -95,8 +98,8 @@ class Connection
                 'Content-Type'  => 'application/json',
                 'Authorization' => $this->accessToken,
                 'x-api-key'     => $this->apiKey,
-                'cooperativa'   => config('sicredi.cooperativa'),
-                'posto'         => config('sicredi.posto'),
+                'cooperativa'   => $this->cooperativa,
+                'posto'         => $this->posto,
             ];
 
             $response = $cliente->post($this->baseUrl . $url, [
@@ -126,8 +129,8 @@ class Connection
                 'Authorization' => $accessToken,
                 'codigoBeneficiario' => $beneficiario,
                 'x-api-key'     => $this->apiKey,
-                'cooperativa'   => config('sicredi.cooperativa'),
-                'posto'         => config('sicredi.posto'),
+                'cooperativa'   => $this->cooperativa,
+                'posto'         => $this->posto,
             ];
 
             $response = $cliente->patch($this->baseUrl . $url, [

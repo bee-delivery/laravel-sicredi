@@ -7,20 +7,35 @@ use Beedelivery\Sicredi\Utils\Connection;
 
 class BankingConnection extends Connection
 {
-    
 
-    public function __construct()
+    private $alias;
+    public function __construct($alias = null)
     {
         if (session_status() === PHP_SESSION_NONE) {
             session_start();
         }
+        $this->alias = $alias;
+        $config = null;
 
+        if ($alias && config('sicredi.accounts.' . $alias)) {
+            $config = config('sicredi.accounts.' . $alias);
+        } else {
+            $config = [
+                'basic_user'       => config('sicredi.basic_user'),
+                'basic_password'   => config('sicredi.basic_password'),
+                'x_api_key'        => config('sicredi.x_api_key'),
+                'certificate_path' => config('sicredi.certificate_path'),
+                'cooperativa'      => config('sicredi.cooperativa'),
+                'posto'            => config('sicredi.posto'),
+            ];
+        }
         $this->baseUrl  = config('sicredi.base_url');
-        $this->apiKey   = config('sicredi.x_api_key');
-        $this->username = config('sicredi.basic_user');
-        $this->password = config('sicredi.basic_password');
-        $this->path     = config('sicredi.certificate_path');
-
+        $this->apiKey   = $config['x_api_key'];
+        $this->username = $config['basic_user'];
+        $this->password = $config['basic_password'];
+        $this->path     = $config['certificate_path'];
+        $this->cooperativa = $config['cooperativa'];
+        $this->posto = $config['posto'];
         $this->getAccessToken();
     }
 
@@ -29,14 +44,14 @@ class BankingConnection extends Connection
     */
     public function getAccessToken()
     {
+        $sessionKey = $this->alias ? "sicrediToken_{$this->alias}" : "sicrediToken";
+        if (isset($_SESSION[$sessionKey])) {
+            $token = $_SESSION[$sessionKey];
 
-        if (isset($_SESSION["sicrediToken"])) {
-            $token = $_SESSION["sicrediToken"];
-            
             $diffInSeconds = Carbon::parse($token['created_at'])->diffInSeconds(now());
 
             if ($diffInSeconds <= $token['expires_in']) {
-                $this->accessToken = $token['token_type'].' '.$token['access_token'];
+                $this->accessToken = $token['token_type'] . ' ' . $token['access_token'];
                 return $this->accessToken;
             }
 
@@ -52,7 +67,7 @@ class BankingConnection extends Connection
 
                 $response = $this->auth($params);
 
-                if($response['code'] == 200){
+                if ($response['code'] == 200) {
                     $token['token_type'] = $response['response']['token_type'];
                     $token['access_token'] = $response['response']['access_token'];
                     $token['expires_in'] = $response['response']['expires_in'];
@@ -61,13 +76,12 @@ class BankingConnection extends Connection
                     $token['scope'] = $response['response']['scope'];
                     $token['created_at'] = now();
 
-                    $_SESSION["sicrediToken"] = $token;
+                    $_SESSION[$sessionKey] = $token;
 
-                    $this->accessToken = $token['token_type'].' '.$token['access_token'];
+                    $this->accessToken = $token['token_type'] . ' ' . $token['access_token'];
                     return $this->accessToken;
                 }
-
-            }   
+            }
         }
 
         $params = [
@@ -80,7 +94,7 @@ class BankingConnection extends Connection
 
         $response = $this->auth($params);
 
-        if($response['code'] == 200){
+        if ($response['code'] == 200) {
             $token['token_type'] = $response['response']['token_type'];
             $token['access_token'] = $response['response']['access_token'];
             $token['expires_in'] = $response['response']['expires_in'];
@@ -89,10 +103,10 @@ class BankingConnection extends Connection
             $token['scope'] = $response['response']['scope'];
             $token['created_at'] = now();
 
-            $_SESSION["sicrediToken"] = $token;
+            $_SESSION[$sessionKey] = $token;
         }
-        
-        $this->accessToken = $token['token_type'].' '.$token['access_token'];
+
+        $this->accessToken = $token['token_type'] . ' ' . $token['access_token'];
         return $this->accessToken;
     }
 }

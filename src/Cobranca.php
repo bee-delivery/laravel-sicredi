@@ -11,9 +11,9 @@ class Cobranca
 
     protected $response;
 
-    public function __construct()
+    public function __construct($alias = null)
     {
-        $this->response = new BankingConnection();
+        $this->response = new BankingConnection($alias);
     }
 
 
