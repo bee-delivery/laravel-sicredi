@@ -4,9 +4,9 @@ namespace Beedelivery\Sicredi;
 
 class Sicredi
 {
-    public function cobranca()
+    public function cobranca($alias = null)
     {
-        return new Cobranca();
+        return new Cobranca($alias);
     }
 
     public function pix($alias = null)
