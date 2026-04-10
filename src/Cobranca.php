@@ -20,8 +20,16 @@ class Cobranca
     public function details($codigoBeneficiario,  $sicredId)
     {
         try {
-
             return $this->response->get("cobranca/boleto/v1/boletos?codigoBeneficiario=$codigoBeneficiario&nossoNumero=$sicredId");
+        } catch (\GuzzleHttp\Exception\RequestException $e) {
+            $body = $e->hasResponse()
+                ? (string) $e->getResponse()->getBody()
+                : $e->getMessage();
+
+            return [
+                'code' => $e->hasResponse() ? $e->getResponse()->getStatusCode() : $e->getCode(),
+                'response' => $body,
+            ];
         } catch (\Exception $e) {
             return [
                 'code' => $e->getCode(),
@@ -36,6 +44,15 @@ class Cobranca
             $this->validateCobrancaParams($params);
 
             return $this->response->post('cobranca/boleto/v1/boletos', $params);
+        } catch (\GuzzleHttp\Exception\RequestException $e) {
+            $body = $e->hasResponse()
+                ? (string) $e->getResponse()->getBody()
+                : $e->getMessage();
+
+            return [
+                'code' => $e->hasResponse() ? $e->getResponse()->getStatusCode() : $e->getCode(),
+                'response' => $body,
+            ];
         } catch (\Exception $e) {
             return [
                 'code' => $e->getCode(),
@@ -50,6 +67,15 @@ class Cobranca
             $this->validateBarCode(['barCode' => $barCode]);
 
             return $this->response->getBinario('cobranca/boleto/v1/boletos/pdf?LinhaDigitavel=' . $barCode);
+        } catch (\GuzzleHttp\Exception\RequestException $e) {
+            $body = $e->hasResponse()
+                ? (string) $e->getResponse()->getBody()
+                : $e->getMessage();
+
+            return [
+                'code' => $e->hasResponse() ? $e->getResponse()->getStatusCode() : $e->getCode(),
+                'response' => $body,
+            ];
         } catch (\Exception $e) {
             return [
                 'code' => $e->getCode(),
