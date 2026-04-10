@@ -44,15 +44,6 @@ class Pix
 
 
             return $this->response->post('multipag/v1/pagamentos/pix/chave', $params);
-        } catch (\GuzzleHttp\Exception\RequestException $e) {
-            $body = $e->hasResponse()
-                ? (string) $e->getResponse()->getBody()
-                : $e->getMessage();
-
-            return [
-                'code' => $e->hasResponse() ? $e->getResponse()->getStatusCode() : $e->getCode(),
-                'response' => $body,
-            ];
         } catch (\Exception $e) {
             return [
                 'code' => $e->getCode(),
@@ -76,15 +67,6 @@ class Pix
                 'x-documento' => $this->contaData['documento'],
             ];
             return $this->response->get('multipag/v1/pagamentos/pix/' . $idTransacao, null, $header);
-        } catch (\GuzzleHttp\Exception\RequestException $e) {
-            $body = $e->hasResponse()
-                ? (string) $e->getResponse()->getBody()
-                : $e->getMessage();
-
-            return [
-                'code' => $e->hasResponse() ? $e->getResponse()->getStatusCode() : $e->getCode(),
-                'response' => $body,
-            ];
         } catch (\Exception $e) {
             return [
                 'code' => $e->getCode(),
@@ -110,15 +92,6 @@ class Pix
             ];
 
             return $this->response->patch('multipag/v1/pagamentos/pix/cancelamentos', $params, null, null);
-        } catch (\GuzzleHttp\Exception\RequestException $e) {
-            $body = $e->hasResponse()
-                ? (string) $e->getResponse()->getBody()
-                : $e->getMessage();
-
-            return [
-                'code' => $e->hasResponse() ? $e->getResponse()->getStatusCode() : $e->getCode(),
-                'response' => $body,
-            ];
         } catch (\Exception $e) {
             return [
                 'code' => $e->getCode(),

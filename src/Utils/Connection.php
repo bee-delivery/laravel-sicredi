@@ -46,8 +46,8 @@ class Connection
             ];
         } catch (RequestException $e) {
             return [
-                'code' => $e->getCode(),
-                'response' => $e->getMessage()
+                'code' => $e->hasResponse() ? $e->getResponse()->getStatusCode() : $e->getCode(),
+                'response' => $e->hasResponse() ? (string) $e->getResponse()->getBody() : $e->getMessage(),
             ];
         }
     }
@@ -83,8 +83,8 @@ class Connection
             ];
         } catch (RequestException $e) {
             return [
-                'code' => $e->getCode(),
-                'response' => $e->getMessage()
+                'code' => $e->hasResponse() ? $e->getResponse()->getStatusCode() : $e->getCode(),
+                'response' => $e->hasResponse() ? (string) $e->getResponse()->getBody() : $e->getMessage(),
             ];
         }
     }
@@ -113,8 +113,8 @@ class Connection
             ];
         } catch (RequestException $e) {
             return [
-                'code' => $e->getCode(),
-                'response' => $e->getMessage()
+                'code' => $e->hasResponse() ? $e->getResponse()->getStatusCode() : $e->getCode(),
+                'response' => $e->hasResponse() ? (string) $e->getResponse()->getBody() : $e->getMessage(),
             ];
         }
     }
@@ -144,8 +144,8 @@ class Connection
             ];
         } catch (RequestException $e) {
             return [
-                'code' => $e->getCode(),
-                'response' => $e->getMessage()
+                'code' => $e->hasResponse() ? $e->getResponse()->getStatusCode() : $e->getCode(),
+                'response' => $e->hasResponse() ? (string) $e->getResponse()->getBody() : $e->getMessage(),
             ];
         }
     }
@@ -189,8 +189,8 @@ class Connection
             ];
         } catch (RequestException $e) {
             return [
-                'code' => $e->getCode(),
-                'response' => $e->getMessage()
+                'code' => $e->hasResponse() ? $e->getResponse()->getStatusCode() : $e->getCode(),
+                'response' => $e->hasResponse() ? (string) $e->getResponse()->getBody() : $e->getMessage(),
             ];
         }
     }

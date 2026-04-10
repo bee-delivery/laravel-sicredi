@@ -134,8 +134,8 @@ class PixConnection extends Connection
             ];
         } catch (RequestException $e) {
             return [
-                'code' => $e->getCode(),
-                'response' => $e->getMessage()
+                'code' => $e->hasResponse() ? $e->getResponse()->getStatusCode() : $e->getCode(),
+                'response' => $e->hasResponse() ? (string) $e->getResponse()->getBody() : $e->getMessage(),
             ];
         }
     }
@@ -266,8 +266,8 @@ class PixConnection extends Connection
             ];
         } catch (RequestException $e) {
             return [
-                'code' => $e->getCode(),
-                'response' => $e->getMessage()
+                'code' => $e->hasResponse() ? $e->getResponse()->getStatusCode() : $e->getCode(),
+                'response' => $e->hasResponse() ? (string) $e->getResponse()->getBody() : $e->getMessage(),
             ];
         }
     }
