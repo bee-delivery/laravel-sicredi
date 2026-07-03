@@ -15,9 +15,6 @@ trait Helpers
     public function validateCobrancaParams($key)
     {
         $validator = Validator::make($key, [
-           'beneficiarioFinal.documento'    => 'required|string',  
-           'beneficiarioFinal.tipoPessoa'   => 'required|string',
-           'beneficiarioFinal.nome'         => 'required|string',
            'pagador.documento'              => 'required|string',
            'pagador.tipoPessoa'             => 'required|string',
            'pagador.nome'                   => 'required|string',
@@ -38,6 +35,32 @@ trait Helpers
         }
     }
    
+    /*
+     * Valida dados para contratacao de webhook de cobranca.
+     *
+     * @param array $params
+     * @return void
+     */
+    public function validateWebhookContractParams($params)
+    {
+        $validator = Validator::make($params, [
+            'cooperativa'     => 'required|string',
+            'posto'           => 'required|string',
+            'codBeneficiario' => 'required|string',
+            'eventos'         => 'required|array|min:1',
+            'url'             => 'required|string|starts_with:https',
+            'urlStatus'       => 'required|in:ATIVO,INATIVO,BLOQUEADO',
+            'contratoStatus'  => 'required|in:ATIVO,INATIVO,BLOQUEADO',
+            'nomeResponsavel' => 'nullable|string|max:50',
+            'email'           => 'nullable|email|max:40',
+            'telefone'        => 'nullable|string|max:20',
+        ]);
+
+        if ($validator->fails()) {
+            throw new \Exception($validator->errors()->first());
+        }
+    }
+
     public function validateBarCode($barCode)
     {
         $validator = Validator::make($barCode, [
